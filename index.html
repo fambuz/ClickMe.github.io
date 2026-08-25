@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I Love You Animation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #f7d188;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .mo-container {
+      width: 400px;
+      height: 400px;
+      position: relative;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+    .lttr {
+      fill: #763c8c;
+      transition: opacity 0.2s ease;
+    }
+    .line {
+      stroke: #763c8c;
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+  </style>
+  <!-- Load Mo.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/@mojs/core"></script>
+</head>
+<body>
+
+<div class="mo-container">
+  <svg viewBox="0 0 500 200">
+    <!-- Sliding Side Lines -->
+    <line class="line line--left" x1="40" y1="60" x2="40" y2="140" />
+    <line class="line line--rght" x1="460" y1="60" x2="460" y2="140" />
+
+    <!-- Letter SVG Paths -->
+    <g class="letters">
+      <!-- I -->
+      <path class="lttr lttr--I" d="M70 60 h15 v80 h-15 z"/>
+      <!-- L -->
+      <path class="lttr lttr--L" d="M110 60 h15 v65 h30 v15 h-45 z"/>
+      <!-- O -->
+      <path class="lttr lttr--O" d="M175 60 a 40 40 0 1 0 0.1 0 M175 75 a 25 25 0 1 1 -0.1 0"/>
+      <!-- V -->
+      <path class="lttr lttr--V" d="M230 60 l20 80 h15 l20 -80 h-15 l-12 55 l-13 -55 z"/>
+      <!-- E -->
+      <path class="lttr lttr--E" d="M300 60 h40 v15 h-25 v18 h20 v15 h-20 v17 h25 v15 h-40 z"/>
+      <!-- Y -->
+      <path class="lttr lttr--Y" d="M360 60 l20 40 v40 h15 v-40 l20 -40 h-15 l-12 28 l-13 -28 z"/>
+      <!-- O2 -->
+      <path class="lttr lttr--O2" d="M430 60 a 40 40 0 1 0 0.1 0 M430 75 a 25 25 0 1 1 -0.1 0"/>
+      <!-- U -->
+      <path class="lttr lttr--U" d="M410 60 h15 v50 a 15 15 0 0 0 30 0 v-50 h15 v50 a 30 30 0 0 1 -60 0 z"/>
+    </g>
+  </svg>
+</div>
+
+<script>
+  const $ = document.querySelector.bind(document);
+
+  // Target Elements
+  const el = {
+    container: $('.mo-container'),
+    i: $('.lttr--I'),
+    l: $('.lttr--L'),
+    o: $('.lttr--O'),
+    v: $('.lttr--V'),
+    e: $('.lttr--E'),
+    y: $('.lttr--Y'),
+    o2: $('.lttr--O2'),
+    u: $('.lttr--U'),
+    lineLeft: $('.line--left'),
+    lineRight: $('.line--rght'),
+    colTxt: "#763c8c",
+    colHeart: "#fa4843"
+  };
+
+  // Burst Particles Function
+  const createBurst = (x = 0) => {
+    return new mojs.Burst({
+      parent: el.container,
+      left: '50%',
+      top: '50%',
+      x: x,
+      radius: { 20: 80 },
+      count: 8,
+      children: {
+        shape: 'circle',
+        radius: [6, 2],
+        fill: [el.colTxt, el.colHeart],
+        duration: 400,
+        easing: 'quad.out'
+      }
+    });
+  };
+
+  // Animation Timings
+  const move = 800;
+  const opts = { duration: move, easing: 'sin.inOut' };
+
+  // Main Timeline
+  const timeline = new mojs.Timeline({ repeat: 999 });
+
+  // 1. Move left line rightwards & shrink "LOVE"
+  const lineLeftAnim = new mojs.Html({
+    ...opts,
+    el: el.lineLeft,
+    x: { 0: 120 }
+  });
+
+  // 2. Move right line leftwards & shrink "YOU"
+  const lineRightAnim = new mojs.Html({
+    ...opts,
+    el: el.lineRight,
+    x: { 0: -120 }
+  });
+
+  timeline.add(lineLeftAnim, lineRightAnim);
+
+  // Hide fading letters midway
+  setTimeout(() => {
+    [el.l, el.o, el.v, el.e].forEach(item => item.style.opacity = '0');
+    createBurst(-50).play();
+  }, move);
+
+  setTimeout(() => {
+    [el.y, el.o2].forEach(item => item.style.opacity = '0');
+    createBurst(50).play();
+  }, move * 1.5);
+
+  // Start animation loop
+  timeline.play();
+</script>
+
+</body>
+</html>
