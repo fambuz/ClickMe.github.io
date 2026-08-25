@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I Love You Animation</title>
+  <title>I Love You</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -16,7 +16,7 @@
     }
     .wrapper {
       position: relative;
-      width: 700px;
+      width: 800px;
       height: 250px;
       display: flex;
       justify-content: center;
@@ -31,7 +31,7 @@
     }
     .text-fill {
       fill: #763c8c;
-      font-size: 58px;
+      font-size: 56px;
       font-weight: 900;
       dominant-baseline: central;
     }
@@ -44,69 +44,68 @@
 <body>
 
 <div class="wrapper">
-  <svg viewBox="0 0 700 250">
+  <svg viewBox="0 0 800 250">
     <defs>
-      <!-- Left Clip Box (Grows inwards to hide LOVE) -->
+      <!-- Clip path for collapsing "LOVE" -->
       <clipPath id="clip-love">
-        <rect id="rect-love" x="200" y="0" width="150" height="250" />
+        <rect id="rect-love" x="240" y="0" width="160" height="250" />
       </clipPath>
-      <!-- Right Clip Box (Grows inwards to hide YO) -->
+      <!-- Clip path for collapsing "YO" -->
       <clipPath id="clip-yo">
-        <rect id="rect-yo" x="350" y="0" width="150" height="250" />
+        <rect id="rect-yo" x="400" y="0" width="160" height="250" />
       </clipPath>
     </defs>
 
-    <!-- Side Bars -->
-    <rect id="barL" class="bar" x="90" y="80" width="6" height="90" rx="3" />
-    <rect id="barR" class="bar" x="604" y="80" width="6" height="90" rx="3" />
+    <!-- Side Bars (Initial exact positioning for 'I LOVE YOU') -->
+    <rect id="barL" class="bar" x="140" y="80" width="6" height="90" rx="3" />
+    <rect id="barR" class="bar" x="654" y="80" width="6" height="90" rx="3" />
 
     <!-- Static Anchors: I and U -->
-    <text id="textI" class="text-fill" x="120" y="125" text-anchor="start">I</text>
-    <text id="textU" class="text-fill" x="580" y="125" text-anchor="end">U</text>
+    <text id="textI" class="text-fill" x="175" y="125" text-anchor="start">I</text>
+    <text id="textU" class="text-fill" x="625" y="125" text-anchor="end">U</text>
 
-    <!-- Squeezing Text Blocks (Masked) -->
+    <!-- Masked Collapsible Words -->
     <g clip-path="url(#clip-love)">
-      <text id="textLove" class="text-fill" x="200" y="125" text-anchor="start">LOVE</text>
+      <text id="textLove" class="text-fill" x="235" y="125" text-anchor="start">LOVE</text>
     </g>
     <g clip-path="url(#clip-yo)">
-      <text id="textYo" class="text-fill" x="490" y="125" text-anchor="end">YO</text>
+      <text id="textYo" class="text-fill" x="550" y="125" text-anchor="end">YO</text>
     </g>
 
     <!-- Center Heart -->
-    <path id="heart" class="heart-fill" d="M350,145 C330,125 310,110 310,95 C310,80 322,70 335,70 C343,70 347,75 350,80 C353,75 357,70 365,70 C378,70 390,80 390,95 C390,110 370,125 350,145 Z"/>
+    <path id="heart" class="heart-fill" d="M400,145 C380,125 360,110 360,95 C360,80 372,70 385,70 C393,70 397,75 400,80 C403,75 407,70 415,70 C428,70 440,80 440,95 C440,110 420,125 400,145 Z"/>
   </svg>
 </div>
 
 <script>
-  // Center transform origins for SVG shapes
   gsap.set("#heart", { transformOrigin: "50% 50%", scale: 0, opacity: 0 });
 
   const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
 
   tl
-    // --- STAGE 1: Crush "LOVE" & "YO" -> Reveal "I ♥ U" ---
-    .to("#barL", { x: 105, duration: 1, ease: "power2.inOut" }, 0.5)
-    .to("#textI", { x: 105, duration: 1, ease: "power2.inOut" }, 0.5)
-    .to("#rect-love", { x: 105, width: 0, duration: 1, ease: "power2.inOut" }, 0.5)
+    // --- STAGE 1: Smooth Squeeze of "LOVE" & "YO" -> "I ❤ U" ---
+    .to("#barL", { x: 95, duration: 1, ease: "power2.inOut" }, 0.6)
+    .to("#textI", { x: 95, duration: 1, ease: "power2.inOut" }, 0.6)
+    .to("#rect-love", { x: 95, width: 0, duration: 1, ease: "power2.inOut" }, 0.6)
 
-    .to("#barR", { x: -105, duration: 1, ease: "power2.inOut" }, 0.5)
-    .to("#textU", { x: -105, duration: 1, ease: "power2.inOut" }, 0.5)
-    .to("#rect-yo", { width: 0, duration: 1, ease: "power2.inOut" }, 0.5)
+    .to("#barR", { x: -95, duration: 1, ease: "power2.inOut" }, 0.6)
+    .to("#textU", { x: -95, duration: 1, ease: "power2.inOut" }, 0.6)
+    .to("#rect-yo", { width: 0, duration: 1, ease: "power2.inOut" }, 0.6)
 
-    .to("#heart", { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 1.3)
+    .to("#heart", { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 1.4)
 
-    // --- STAGE 2: Crush "I" and "U" -> Final Center Heart ---
-    .to("#barL", { x: 235, duration: 0.8, ease: "power2.inOut" }, 2.5)
-    .to("#textI", { x: 235, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.5)
+    // --- STAGE 2: Squeeze "I" & "U" into center ---
+    .to("#barL", { x: 220, duration: 0.8, ease: "power2.inOut" }, 2.6)
+    .to("#textI", { x: 220, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.6)
 
-    .to("#barR", { x: -235, duration: 0.8, ease: "power2.inOut" }, 2.5)
-    .to("#textU", { x: -235, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.5)
+    .to("#barR", { x: -220, duration: 0.8, ease: "power2.inOut" }, 2.6)
+    .to("#textU", { x: -220, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.6)
 
-    .to(["#barL", "#barR"], { opacity: 0, duration: 0.2 }, 3.1)
-    .to("#heart", { scale: 2.2, duration: 0.6, ease: "back.out(2)" }, 3.1)
+    .to(["#barL", "#barR"], { opacity: 0, duration: 0.2 }, 3.2)
+    .to("#heart", { scale: 2.2, duration: 0.6, ease: "back.out(2)" }, 3.2)
 
     // Pulse animation
-    .to("#heart", { scale: 2.5, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 3.7)
+    .to("#heart", { scale: 2.5, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 3.8)
     .to({}, { duration: 1 });
 </script>
 
