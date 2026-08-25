@@ -2,13 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I Love You</title>
+  <title>I Love You Animation</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background-color: #fceeb5;
       display: flex;
@@ -18,186 +14,100 @@
       overflow: hidden;
       font-family: Arial, Helvetica, sans-serif;
     }
-    .stage {
+    .wrapper {
       position: relative;
+      width: 700px;
+      height: 250px;
       display: flex;
-      align-items: center;
       justify-content: center;
-      width: 600px;
-      height: 200px;
+      align-items: center;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
     }
     .bar {
-      width: 6px;
-      height: 90px;
-      background-color: #763c8c;
-      border-radius: 4px;
-      position: absolute;
-      top: 55px;
-      z-index: 5;
+      fill: #763c8c;
     }
-    #barL { left: 40px; }
-    #barR { right: 40px; }
-
-    .content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4.5rem;
+    .text-fill {
+      fill: #763c8c;
+      font-size: 58px;
       font-weight: 900;
-      color: #763c8c;
-      letter-spacing: 12px;
-      z-index: 2;
+      dominant-baseline: central;
     }
-
-    .word-box {
-      display: inline-flex;
-      align-items: center;
-      overflow: hidden;
-      white-space: nowrap;
-      vertical-align: middle;
-    }
-
-    .heart {
-      display: inline-block;
-      color: #fa4843;
-      font-size: 5rem;
-      width: 0px;
-      opacity: 0;
-      transform: scale(0);
-      vertical-align: middle;
+    .heart-fill {
+      fill: #fa4843;
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 <body>
 
-<div class="stage">
-  <div class="bar" id="barL"></div>
+<div class="wrapper">
+  <svg viewBox="0 0 700 250">
+    <defs>
+      <!-- Left Clip Box (Grows inwards to hide LOVE) -->
+      <clipPath id="clip-love">
+        <rect id="rect-love" x="200" y="0" width="150" height="250" />
+      </clipPath>
+      <!-- Right Clip Box (Grows inwards to hide YO) -->
+      <clipPath id="clip-yo">
+        <rect id="rect-yo" x="350" y="0" width="150" height="250" />
+      </clipPath>
+    </defs>
 
-  <div class="content">
-    <span id="charI">I</span>
-    
-    <!-- LOVE container that squishes shut -->
-    <div class="word-box" id="boxLove">
-      <span id="textLove">&nbsp;LOVE</span>
-    </div>
+    <!-- Side Bars -->
+    <rect id="barL" class="bar" x="90" y="80" width="6" height="90" rx="3" />
+    <rect id="barR" class="bar" x="604" y="80" width="6" height="90" rx="3" />
+
+    <!-- Static Anchors: I and U -->
+    <text id="textI" class="text-fill" x="120" y="125" text-anchor="start">I</text>
+    <text id="textU" class="text-fill" x="580" y="125" text-anchor="end">U</text>
+
+    <!-- Squeezing Text Blocks (Masked) -->
+    <g clip-path="url(#clip-love)">
+      <text id="textLove" class="text-fill" x="200" y="125" text-anchor="start">LOVE</text>
+    </g>
+    <g clip-path="url(#clip-yo)">
+      <text id="textYo" class="text-fill" x="490" y="125" text-anchor="end">YO</text>
+    </g>
 
     <!-- Center Heart -->
-    <span class="heart" id="heart">♥</span>
-
-    <!-- YOU container that squishes shut -->
-    <div class="word-box" id="boxYou">
-      <span id="textYou">&nbsp;YOU</span>
-    </div>
-    
-    <span id="charU">U</span>
-  </div>
-
-  <div class="bar" id="barR"></div>
+    <path id="heart" class="heart-fill" d="M350,145 C330,125 310,110 310,95 C310,80 322,70 335,70 C343,70 347,75 350,80 C353,75 357,70 365,70 C378,70 390,80 390,95 C390,110 370,125 350,145 Z"/>
+  </svg>
 </div>
 
 <script>
-  const createAnimation = () => {
-    const tl = anime.timeline({
-      loop: true,
-      autoplay: true
-    });
+  // Center transform origins for SVG shapes
+  gsap.set("#heart", { transformOrigin: "50% 50%", scale: 0, opacity: 0 });
 
-    tl
-    // ----------------------------------------------------
-    // STEP 1: Squeeze "LOVE" out -> Reveal Heart ("I ♥ U")
-    // ----------------------------------------------------
-    .add({
-      targets: '#barL',
-      x: 125,
-      duration: 900,
-      easing: 'easeInOutQuint'
-    }, 800)
-    .add({
-      targets: '#barR',
-      x: -125,
-      duration: 900,
-      easing: 'easeInOutQuint'
-    }, 800)
-    .add({
-      targets: '#boxLove',
-      width: [180, 0],
-      duration: 900,
-      easing: 'easeInOutQuint'
-    }, 800)
-    .add({
-      targets: '#textYou',
-      x: [-120, 0],
-      duration: 900,
-      easing: 'easeInOutQuint'
-    }, 800)
-    .add({
-      targets: '#heart',
-      width: [0, 90],
-      scale: [0, 1.2],
-      opacity: [0, 1],
-      duration: 500,
-      easing: 'easeOutBack'
-    }, 1400)
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
 
-    // ----------------------------------------------------
-    // STEP 2: Squeeze "I", "YOU", "U" -> Final Big Heart
-    // ----------------------------------------------------
-    .add({
-      targets: '#barL',
-      x: 255,
-      duration: 800,
-      easing: 'easeInOutQuint'
-    }, 2800)
-    .add({
-      targets: '#barR',
-      x: -255,
-      duration: 800,
-      easing: 'easeInOutQuint'
-    }, 2800)
-    .add({
-      targets: '#boxYou',
-      width: [140, 0],
-      duration: 800,
-      easing: 'easeInOutQuint'
-    }, 2800)
-    .add({
-      targets: ['#charI', '#charU'],
-      opacity: [1, 0],
-      scale: [1, 0.2],
-      duration: 500,
-      easing: 'easeInQuad'
-    }, 3000)
-    .add({
-      targets: ['#barL', '#barR'],
-      opacity: [1, 0],
-      duration: 200,
-      easing: 'linear'
-    }, 3400)
+  tl
+    // --- STAGE 1: Crush "LOVE" & "YO" -> Reveal "I ♥ U" ---
+    .to("#barL", { x: 105, duration: 1, ease: "power2.inOut" }, 0.5)
+    .to("#textI", { x: 105, duration: 1, ease: "power2.inOut" }, 0.5)
+    .to("#rect-love", { x: 105, width: 0, duration: 1, ease: "power2.inOut" }, 0.5)
 
-    // ----------------------------------------------------
-    // STEP 3: Pop & Pulse Big Heart
-    // ----------------------------------------------------
-    .add({
-      targets: '#heart',
-      scale: [1.2, 2.8],
-      duration: 500,
-      easing: 'easeOutBack'
-    }, 3400)
-    .add({
-      targets: '#heart',
-      scale: 3.2,
-      duration: 350,
-      direction: 'alternate',
-      loop: 2,
-      easing: 'easeInOutSine'
-    }, 3900)
+    .to("#barR", { x: -105, duration: 1, ease: "power2.inOut" }, 0.5)
+    .to("#textU", { x: -105, duration: 1, ease: "power2.inOut" }, 0.5)
+    .to("#rect-yo", { width: 0, duration: 1, ease: "power2.inOut" }, 0.5)
 
-    // Hold at the end before restarting
-    .add({ duration: 1200 });
-  };
+    .to("#heart", { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 1.3)
 
-  window.onload = createAnimation;
+    // --- STAGE 2: Crush "I" and "U" -> Final Center Heart ---
+    .to("#barL", { x: 235, duration: 0.8, ease: "power2.inOut" }, 2.5)
+    .to("#textI", { x: 235, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.5)
+
+    .to("#barR", { x: -235, duration: 0.8, ease: "power2.inOut" }, 2.5)
+    .to("#textU", { x: -235, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.5)
+
+    .to(["#barL", "#barR"], { opacity: 0, duration: 0.2 }, 3.1)
+    .to("#heart", { scale: 2.2, duration: 0.6, ease: "back.out(2)" }, 3.1)
+
+    // Pulse animation
+    .to("#heart", { scale: 2.5, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, 3.7)
+    .to({}, { duration: 1 });
 </script>
 
 </body>
