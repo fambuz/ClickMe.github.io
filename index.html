@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I Love You</title>
+  <title>Sophie</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -56,13 +56,13 @@
       </clipPath>
     </defs>
 
-    <!-- Side Bars (Initial exact positioning for 'I LOVE YOU') -->
+    <!-- Side Bars (Adjusted right bar leftward) -->
     <rect id="barL" class="bar" x="140" y="80" width="6" height="90" rx="3" />
-    <rect id="barR" class="bar" x="654" y="80" width="6" height="90" rx="3" />
+    <rect id="barR" class="bar" x="614" y="80" width="6" height="90" rx="3" />
 
-    <!-- Static Anchors: I and U -->
+    <!-- Static Anchors: I and U (Adjusted U starting position) -->
     <text id="textI" class="text-fill" x="175" y="125" text-anchor="start">I</text>
-    <text id="textU" class="text-fill" x="625" y="125" text-anchor="end">U</text>
+    <text id="textU" class="text-fill" x="585" y="125" text-anchor="end">U</text>
 
     <!-- Masked Collapsible Words -->
     <g clip-path="url(#clip-love)">
@@ -88,8 +88,8 @@
     .to("#textI", { x: 95, duration: 1, ease: "power2.inOut" }, 0.6)
     .to("#rect-love", { x: 95, width: 0, duration: 1, ease: "power2.inOut" }, 0.6)
 
-    .to("#barR", { x: -95, duration: 1, ease: "power2.inOut" }, 0.6)
-    .to("#textU", { x: -95, duration: 1, ease: "power2.inOut" }, 0.6)
+    .to("#barR", { x: -55, duration: 1, ease: "power2.inOut" }, 0.6)
+    .to("#textU", { x: -55, duration: 1, ease: "power2.inOut" }, 0.6)
     .to("#rect-yo", { width: 0, duration: 1, ease: "power2.inOut" }, 0.6)
 
     .to("#heart", { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 1.4)
@@ -98,8 +98,8 @@
     .to("#barL", { x: 220, duration: 0.8, ease: "power2.inOut" }, 2.6)
     .to("#textI", { x: 220, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.6)
 
-    .to("#barR", { x: -220, duration: 0.8, ease: "power2.inOut" }, 2.6)
-    .to("#textU", { x: -220, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.6)
+    .to("#barR", { x: -180, duration: 0.8, ease: "power2.inOut" }, 2.6)
+    .to("#textU", { x: -180, opacity: 0, duration: 0.8, ease: "power2.inOut" }, 2.6)
 
     .to(["#barL", "#barR"], { opacity: 0, duration: 0.2 }, 3.2)
     .to("#heart", { scale: 2.2, duration: 0.6, ease: "back.out(2)" }, 3.2)
